@@ -2,6 +2,7 @@
 
 log="/root/scripts/file.csv"
 
+
 count=1
 
 while     :
