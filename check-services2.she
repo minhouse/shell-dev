@@ -1,0 +1,97 @@
+#!/bin/bash -ue #なぜこのオプションをつけてるのか
+#===================================================================================
+#
+#         FILE: service-monitering.sh
+#
+#        USAGE: service-monitering.sh <SERVICE NAME>
+#
+#  DESCRIPTION: 
+#
+#      OPTIONS: ---
+# REQUIREMENTS: ---
+#         BUGS: ---
+#        NOTES: ---
+#       AUTHOR:  Name  (sex), address
+#      COMPANY: 
+#      VERSION:
+#      CREATED: DD.MM.YYYY - hh:mm:ss
+#     REVISION: DD.MM.YYYY
+#=================================================================================
+#----------------------------------------------------------------------
+# valiables
+#----------------------------------------------------------------------
+SERVICE="$1"                                             # monitering service name
+INTERVAL=60 #cron使うのであればいらない                                              # $INTERVAL second wait
+MAIL_TO="minho.ny@gmail.com"   # MAIL TO
+DATE_YMD="date "+%Y%m%d%H%M%S"`
+PS_CMD='ps -ef |grep "$SERVICE" |grep -v grep' #子プロセスを処理
+LOCK_FILE="/tmp/`basename $0`-"$SERVICE".lock" #排他制御するため
+#Lockファイルがあるため起動できない場合は通知する仕組みを使う。
+
+NG_LOGGER_CMD='logger -t [Service Monitor] -p user.error ${SERVIICE} is down'
+OK_LOGGER_CMD='logger -t [Service Monitor] -p user.error ${SERVIICE} is start'
+FAIL_LOGGER_CMD='logger -t [Service Monitor] -p user.error ${SERVIICE} is Restart Fail'
+#この３つは纏めても良い。
+HOST_NAME=`uname -n`
+MAIL_BODY=""
+MAIL_FOOTER=""
+PROC_STATE=""
+SUBJECT=
+MBODY=""
+
+#=== FUNCTION ================================================================
+#        NAME: Mail_Send
+# DESCRIPTION: mail send function
+# PARAMETER 1: ---
+#=============================================================================
+function Mail_Send(){ #bashではどちらでも構わない。ボーンシェるでは宣言はない。
+PROC_STATE=$1 #メイン処理のプロセス名mail sendがNGかOKか
+case PROC_STATE in
+   "FAIL")
+         SUBJECT="${HOST_NAME} : ${SERVICE} is Restart Fail! : `date "+%Y%m%d%H%M%S"` "
+         MAIL_BODY="SERVER:${HOST_NAME}\nSTATE:${SERVICE} is Restart Fail!\nDATE:`date "+%Y%m%d%H%M%S"` "
+         
+     "NG")
+         SUBJECT="${HOST_NAME} : ${SERVICE} is down! : `date "+%Y%m%d%H%M%S"` "
+         MAIL_BODY="SERVER:${HOST_NAME}\nSTATE:${SERVICE} is down!\nDATE:`date "+%Y%m%d%H%M%S"` "
+         ;;
+    "OK")
+         SUBJECT="${HOST_NAME} : ${SERVICE} is START! : `date "+%Y%m%d%H%M%S"` "
+         MAIL_BODY="SERVER:${HOST_NAME}\nSTATE:${SERVICE} is START!\nDATE:`date "+%Y%m%d%H%M%S"` "
+         ;;
+       *)
+         : #コロンはなにもしないということ
+         ;;
+esac
+
+MBODY=`echo -e $MAIL_BODY"
+MFOOT=`echo -e $MAIL_FOOTER" #Footerがない
+mailx -s "$SUBJECT" $MAIL_TO <<_MB #sendmailのサブプログラム .fromは実行ユーザーになる。mail -r フロムアドレスを指定できる
+$MBODY
+$MFOOT
+_MB
+}
+
+
+#----------------------------------------------------------------------
+# MAIN
+#----------------------------------------------------------------------
+if [ `eval $PS_CMD` -eq 0 ];then
+  eval $NG_LOGGER_CMD && Mail_Send NG 
+  case $SERVICE in
+    radius)
+           # Add restart logic here
+           ;;
+     squid)
+           # Add restart logic here
+           ;;
+         *)
+           MAIL_FOOTER="Not Defined Restart Logic"
+           ;; 
+  esac
+	else  if [ `eval $PS_CMD` -ne 0 ];then
+     eval $OK_LOGGER_CMD && Mail_Send OK
+  else 
+     eval $FAIL_LOGGER_CMD && Mail_send FAIL
+  fi     
+fi
