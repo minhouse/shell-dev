@@ -11,18 +11,18 @@
 # REQUIREMENTS: There must be iplist file. /dir/xxxlogiplist.txt
 #         BUGS: ---
 #        NOTES: ---
-#       AUTHOR:  Minho Tokuhara
+#       AUTHOR:  
 #      COMPANY:  
 #      VERSION: 1.2
 #      CREATED: 10.08.2013 
 #     REVISION: DD.MM.YYYY
 #==========================================================================
 #searchlog.sh Version1.2
-#Originally created by Minho Tokuhara
+#Originally created by 
 #Date created: 2013/08/26
 #Date modified: 2013/10/02
 #You need to copy original script file create a new version of script
-#Modified by Hiroshi Yasuda
+#Modified by 
 
 LANG=C
 
