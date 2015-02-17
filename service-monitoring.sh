@@ -11,8 +11,8 @@
 # REQUIREMENTS: ---
 #         BUGS: ---
 #        NOTES: ---
-#       AUTHOR: Hiroshi Yasuda & Minho Tokuhara
-#      COMPANY: at&t Japan
+#       AUTHOR: 
+#      COMPANY: 
 #      VERSION: 2.2
 #      CREATED: 11.08.2013
 #     REVISION: 11.08.2013
