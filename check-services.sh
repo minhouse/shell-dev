@@ -11,14 +11,14 @@
 # REQUIREMENTS: ---
 #         BUGS: ---
 #        NOTES: ---
-#       AUTHOR:  Minho Tokuhara
-#      COMPANY:  at&t Japan
+#       AUTHOR:  
+#      COMPANY:  
 #      VERSION:
 #      CREATED: 10.08.2013 
 #     REVISION: DD.MM.YYYY
 #==========================================================================
 #check-services.sh Version1.0
-#Originally created by Minho Tokuhara for at&t Japan
+#Originally created by 
 #Date created: 2013/08/4
 #Date modified:
 #You need to copy original script file create a new version of script

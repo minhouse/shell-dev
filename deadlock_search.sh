@@ -11,8 +11,8 @@
 #  REQUIREMENTS: ---
 #          BUGS: ---
 #         NOTES: ---
-#        AUTHOR: Minho Tokuhara 
-#  ORGANIZATION: Landis+Gyr Japan
+#        AUTHOR: 
+#  ORGANIZATION: 
 #       CREATED: 2014/12/30
 #      REVISION: 
 #===============================================================================
